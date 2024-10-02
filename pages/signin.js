@@ -14,7 +14,7 @@ import { styled } from '@mui/material/styles'; // Importando o sistema de estili
 
 const StyledAvatar = styled(Avatar)(({ theme }) => ({
   margin: theme.spacing(1),
-  backgroundColor: theme.palette.secondary.main,
+  backgroundColor: theme.palette.primary.main,
 }));
 
 function Copyright() {
