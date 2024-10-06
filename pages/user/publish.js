@@ -1,7 +1,57 @@
 
-import {Button, Box, Container, Select, TextField, Typography } from '@mui/material'
+import {Button, Box, Container, Select, TextField, Typography, IconButton } from '@mui/material'
 import TemplateDefault from '../../src/templates/Default'
 import { useTheme } from '@emotion/react'
+
+import styled from 'styled-components'
+import { DeleteForever } from '@mui/icons-material'
+
+const Dropzone = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 200px;
+    height: 150px;
+    border: 2px dashed black;
+    padding: 10px;
+    margin: 15px 15px 15px 0;
+`
+
+const Thumb = styled.div`
+    width: 200px;
+    height: 150px;
+    margin: 15px 15px 15px 0;
+    background-color: black;
+    background-size: cover;
+    background-position: center center;
+   
+    position: relative;
+
+    &:hover .mask{
+        display: flex;
+    }
+
+    .mask {
+        display: none;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        background-color: rgba(0,0,0,0.7);
+        height: 100%;
+        width: 100%;
+
+    }
+
+    .mainImage {
+        background-color: blue;
+        width: 40%;
+        position: absolute;
+        bottom: 0;
+        padding-left: 5px;
+        border-top-right-radius: 7px;
+    }
+`
 
 const Publish = () => {
     const theme = useTheme()
@@ -89,6 +139,30 @@ const Publish = () => {
                         <Typography variant="body2" component="div" color='textPrimary'>
                             A primeira imagem é a foto principal do seu anúncio.
                         </Typography>
+                        <Box sx={{
+                            display: 'flex',
+                        }}>
+                            <Dropzone sx={{backgroundColor: theme.palette.background.default}}>
+
+                                <Typography color="textPrimary" variant="body2">
+                                    Clique para adicionar ou arraste a imagem para aqui!
+                                </Typography>
+                            </Dropzone>
+                            <Thumb // dinâmico
+                                style={{backgroundImage: 'url(https://img.freepik.com/free-photo/colorful-design-with-spiral-design_188544-9588.jpg)'}}
+                            >
+                                <Box className='mainImage'>
+                                    <Typography variant='body2' color="secondary">
+                                        Principal
+                                    </Typography>
+                                </Box>
+                                <Box className='mask'>
+                                <IconButton color="secondary" /*onClick*/>
+                                    <DeleteForever fontSize='large'/>
+                                </IconButton>
+                            </Box>
+                            </Thumb>
+                        </Box>
                     </Box>
                 </Container>
                 <Container
@@ -111,7 +185,7 @@ const Publish = () => {
                             fullWidth
                             sx={{mt:2}}
                         >
-
+                            
                         </TextField>
                     </Box>
                 </Container>
