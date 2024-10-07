@@ -5,6 +5,9 @@ import { useTheme } from '@emotion/react'
 
 import styled from 'styled-components'
 import { DeleteForever } from '@mui/icons-material'
+import { useDropzone } from 'react-dropzone'
+
+import { useState } from 'react'
 
 const Dropzone = styled.div`
     display: flex;
@@ -16,6 +19,7 @@ const Dropzone = styled.div`
     border: 2px dashed black;
     padding: 10px;
     margin: 15px 15px 15px 0;
+    cursor: pointer;
 `
 
 const Thumb = styled.div`
@@ -25,7 +29,7 @@ const Thumb = styled.div`
     background-color: black;
     background-size: cover;
     background-position: center center;
-   
+    flex-wrap: wrap;
     position: relative;
 
     &:hover .mask{
@@ -55,6 +59,23 @@ const Thumb = styled.div`
 
 const Publish = () => {
     const theme = useTheme()
+
+    const [files, setFiles] = useState([])
+
+    const {getRootProps, getInputProps} = useDropzone({
+        accept: 'image/*',
+        onDrop: (acceptedFile) => {
+            const newFiles = acceptedFile.map(file => {
+                return Object.assign(file, {
+                    preview: URL.createObjectURL(file)
+                })
+            })
+            setFiles([
+                ...files,
+                ...newFiles,
+            ])
+        }   
+    })
 
     return(
         <>
@@ -139,29 +160,45 @@ const Publish = () => {
                         <Typography variant="body2" component="div" color='textPrimary'>
                             A primeira imagem é a foto principal do seu anúncio.
                         </Typography>
+
                         <Box sx={{
                             display: 'flex',
+                            flexWrap: 'wrap',
                         }}>
-                            <Dropzone sx={{backgroundColor: theme.palette.background.default}}>
-
+                            <Dropzone sx={{backgroundColor: theme.palette.background.default}} {...getRootProps()}>
+                                <input {...getInputProps()}/>
                                 <Typography color="textPrimary" variant="body2">
                                     Clique para adicionar ou arraste a imagem para aqui!
                                 </Typography>
                             </Dropzone>
-                            <Thumb // dinâmico
-                                style={{backgroundImage: 'url(https://img.freepik.com/free-photo/colorful-design-with-spiral-design_188544-9588.jpg)'}}
-                            >
-                                <Box className='mainImage'>
-                                    <Typography variant='body2' color="secondary">
-                                        Principal
-                                    </Typography>
-                                </Box>
-                                <Box className='mask'>
-                                <IconButton color="secondary" /*onClick*/>
-                                    <DeleteForever fontSize='large'/>
-                                </IconButton>
-                            </Box>
-                            </Thumb>
+                            {
+                                files.map((file, index) => (
+                                    
+                                    <Thumb // dinâmico
+                                        key={file.name}
+                                        style={{backgroundImage: `url(${file.preview})`}}
+                                    >   
+                                        {
+                                            index === 0 ?
+
+                                            <Box className='mainImage'>
+                                                <Typography variant='body2' color="secondary">
+                                                    Principal
+                                                </Typography>
+                                            </Box>
+
+                                            :
+                                            
+                                            null
+                                        }
+                                            <Box className='mask'>
+                                            <IconButton color="secondary" /*onClick*/>
+                                                <DeleteForever fontSize='large'/>
+                                            </IconButton>
+                                            </Box>
+                                    </Thumb>
+                                ))
+                            }
                         </Box>
                     </Box>
                 </Container>
