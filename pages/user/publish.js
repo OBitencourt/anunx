@@ -1,5 +1,5 @@
 
-import {Button, Box, Container, Select, TextField, Typography, IconButton } from '@mui/material'
+import {Button, Box, Container, Select, TextField, Typography, IconButton, FormControl, InputLabel, OutlinedInput, InputAdornment } from '@mui/material'
 import TemplateDefault from '../../src/templates/Default'
 import { useTheme } from '@emotion/react'
 
@@ -231,6 +231,32 @@ const Publish = () => {
                         </TextField>
                     </Box>
                 </Container>
+                <Container
+                    maxWidth="md"
+                    sx={{mt:6, mb: 3}}
+                >
+                    <Box
+                        sx={{backgroundColor: theme.palette.background.white, padding: 3, boxShadow: '2px 2px 10px black', borderRadius: 2}}
+                    >
+                        <Typography variant="h6" component="h6" color="textPrimary">
+                            Preço
+                        </Typography>
+                        <br />
+                        <FormControl
+                            fullWidth
+                            variant="outlined"
+                        >
+                            <InputLabel htmlFor="outlined-adornment-amount">Valor</InputLabel>
+                            <OutlinedInput 
+                                id="outlined-adornment-amount"
+                                onChange={() => {}}
+                                startAdornment={<InputAdornment position="start">€</InputAdornment>}
+                                label="Valor" // O label também deve ser passado como prop
+                            />
+                        </FormControl>
+                    </Box>
+                </Container>           
+
                 <Container
                     maxWidth="md"
                     sx={{mt:6, mb: 3}}
