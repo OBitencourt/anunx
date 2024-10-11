@@ -54,7 +54,7 @@ const Index = () => {
                 </Container>
 
                 <Container
-                    maxWidth='md'
+                    maxWidth='lg'
                     sx={{padding: '40px'}}
                 >
                     <Typography

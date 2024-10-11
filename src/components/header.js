@@ -1,31 +1,98 @@
-import * as React from 'react';
+import React, {useState} from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
+import { Avatar, Container, IconButton, MenuItem, Menu, Divider } from '@mui/material';
+import Link from 'next/link';
+import { AccountCircle } from '@mui/icons-material';
+
 
 export default function ButtonAppBar() {
+
+  const [anchorUserMenu, setAnchorUserMenu] = useState(false)
+
+  const openUserMenu = Boolean(anchorUserMenu)
+
+
+
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
+      <AppBar position="static" elevation={3}>
+        <Container 
+          maxWidth='lg'
+        >
+          <Toolbar>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              Anunx
+            </Typography>
+            <Link href="/user/publish" passHref legacyBehavior>
+              <Button 
+                color="inherit" 
+                variant='outlined'
+                component='a'
+                sx={{ 
+                  color: 'white',  // Força a cor do texto ser branca
+                  borderColor: 'white', // Força a borda branca
+                  '&:hover': {
+                    borderColor: 'white',
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)' // Adiciona um efeito hover leve
+                  }
+                }}
+                
+              >
+                Anunciar e Vender
+              </Button>
+            </Link>
+
+            <IconButton color='secondary'
+              onClick={(e) => {
+                setAnchorUserMenu(e.currentTarget)
+              }}
+            >
+              {
+                true === false
+                ? 
+                
+                <Avatar 
+                  src=""
+                />
+
+                :
+
+                <AccountCircle />
+              }
+
+              <Typography variant='subtitle2' color='secondary' sx={{ml:1}}> 
+                Arthur Bitencourt
+              </Typography>
+            </IconButton>
+          </Toolbar>
+
+          <Menu
+            anchorEl={anchorUserMenu}
+            open={openUserMenu}
+            onClose={() => {
+              setAnchorUserMenu(null)
+            }}
           >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            News
-          </Typography>
-          <Button color="inherit">Login</Button>
-        </Toolbar>
+            <Link href='/user/dashboard' passHref legacyBehavior>
+              <MenuItem 
+                
+                component='a'
+              >Meus anúncios</MenuItem>            
+            </Link>
+            <Link href='/user/publish' passHref legacyBehavior>
+              <MenuItem 
+                component='a'
+                
+              >Publicar novo anúncio</MenuItem>
+            </Link>
+            <Divider />
+            <MenuItem>Sair</MenuItem>
+          </Menu>
+        </Container>
       </AppBar>
     </Box>
   );
