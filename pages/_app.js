@@ -1,7 +1,7 @@
 
 
 import React from 'react';
-import PropTypes from 'prop-types'
+import propTypes from 'prop-types'
 import Head from 'next/head';
 import { ThemeProvider } from '@mui/material';
 import {CssBaseline} from '@mui/material';
@@ -24,7 +24,7 @@ export default function MyApp(props) {
     )
 }
 
-MyApp.PropTypes = {
-    Component: PropTypes.elementType.isRequired,
-    pageProps: PropTypes.object.isRequired
+MyApp.propTypes = {
+    Component: propTypes.elementType.isRequired,
+    pageProps: propTypes.object.isRequired
 }

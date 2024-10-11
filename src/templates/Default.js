@@ -1,3 +1,4 @@
+import Footer from '../components/footer'
 import Header from '../components/header'
 
 const Default = ({children}) => {
@@ -6,7 +7,7 @@ const Default = ({children}) => {
         <>
             <Header />
             {children}
-            <footer>Footer</footer>
+            <Footer />
         </>
     )
 }
