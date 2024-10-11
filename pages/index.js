@@ -20,10 +20,7 @@ const Index = () => {
 
                 <Container
                     maxWidth='md'
-                    sx={{
-                        padding: '30px 0px 0px 30px',
-                        
-                    }}
+                    
                 >
 
                     <Typography

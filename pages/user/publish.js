@@ -90,7 +90,7 @@ const Publish = () => {
                 <Container 
                     
                     maxWidth="sm"  
-                    sx={{mt:8, mb: 6}}              
+                                 
                 >
                     <Typography color="textPrimary" component="h1" variant="h2" align="center">
                         Publicar Anúncio

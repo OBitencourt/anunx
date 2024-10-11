@@ -9,7 +9,7 @@ export default function Home ()  {
                 maxWidth="sm"
                 
             >
-                <Typography align='center' sx={{mt:8, mb: 6}} component="h1" variant="h2">
+                <Typography align='center' sx={{ mb: 6}} component="h1" variant="h2">
                     Meus Anúncios
                 </Typography>
                 <Button sx={{display: 'block', m: 'auto'}} variant='contained'>
