@@ -6,12 +6,10 @@ import {
     InputBase,
     Paper,
     Typography,
-    Card,
-    CardMedia,
-    CardContent,
 } from '@mui/material'
 import TemplateDefault from '../src/templates/Default'
 import { Search } from '@mui/icons-material'
+import Card from '../src/components/Card'
 
 const Index = () => {
     return (
@@ -65,58 +63,32 @@ const Index = () => {
                     </Typography>
                     <Grid container spacing={4}>
                         <Grid item xs={12} sm={6} md={4} >
-                            <Card>
-                                <CardMedia 
-                                    sx={{paddingTop: '56%'}}
-                                    image={'https://img.freepik.com/free-photo/colorful-design-with-spiral-design_188544-9588.jpg'}
-                                    title="Titulo do Anuncio"
-                                />
-                                <CardContent>
-                                    <Typography variant="h5" component="h2">
-                                        Produto X
-                                    </Typography>
-                                    <Typography>
-                                        R$ 60,00
-                                    </Typography>
-                                </CardContent>
-
-                            </Card>
+                            <Card 
+                                image={'https://img.freepik.com/free-photo/colorful-design-with-spiral-design_188544-9588.jpg'}
+                                title='Produto X'
+                                subtitle='R$60'
+                            />
+                                
+                            
                         </Grid>
                         <Grid item xs={12} sm={6} md={4}>
-                            <Card>
-                                <CardMedia 
-                                    sx={{paddingTop: '56%'}}
-                                    image={'https://img.freepik.com/free-photo/colorful-design-with-spiral-design_188544-9588.jpg'}
-                                    title="Titulo do Anuncio"
-                                />
-                                <CardContent>
-                                    <Typography variant="h5" component="h2">
-                                        Produto X
-                                    </Typography>
-                                    <Typography>
-                                        R$ 60,00
-                                    </Typography>
-                                </CardContent>
+                            <Card 
+                                image={'https://img.freepik.com/free-photo/colorful-design-with-spiral-design_188544-9588.jpg'}
+                                title='Produto X'
+                                subtitle='R$60'
+                            />
                                 
-                            </Card>
+                                
+                            
                         </Grid>
                         <Grid item xs={12} sm={6} md={4}>
-                            <Card>
-                                <CardMedia 
-                                    sx={{paddingTop: '56%'}}
-                                    image={'https://img.freepik.com/free-photo/colorful-design-with-spiral-design_188544-9588.jpg'}
-                                    title="Titulo do Anuncio"
-                                />
-                                <CardContent>
-                                    <Typography variant="h5" component="h2">
-                                        Produto X
-                                    </Typography>
-                                    <Typography>
-                                        R$ 60,00
-                                    </Typography>
-                                </CardContent>
+                            <Card 
+                                image={'https://img.freepik.com/free-photo/colorful-design-with-spiral-design_188544-9588.jpg'}
+                                title='Produto X'
+                                subtitle='R$60'
+                            />
                                 
-                            </Card>
+                            
                         </Grid>
                     </Grid>
                 </Container>
