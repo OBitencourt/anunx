@@ -20,7 +20,6 @@ const Index = () => {
                     maxWidth='md'
                     
                 >
-
                     <Typography
                         variant='h3'
                         component='h1'
@@ -47,7 +46,6 @@ const Index = () => {
                         </IconButton>
                     </Paper>
                 </Container>
-
                 <Container
                     maxWidth='lg'
                     sx={{padding: '40px'}}
