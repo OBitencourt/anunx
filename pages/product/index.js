@@ -1,6 +1,6 @@
 
 import { Box, Container, Grid, Typography, Chip, Card, CardHeader, Avatar, CardMedia } from '@mui/material'
-import TemplateDefault from '../src/templates/Default'
+import TemplateDefault from '../../src/templates/Default'
 import styled from 'styled-components'
 import Carousel from 'react-material-ui-carousel'
 
@@ -47,7 +47,7 @@ const Product = () => {
                                     >
                                         <CardMedia 
                                             sx={{paddingTop: '56%'}}
-                                            image="https://randomwordgenerator.com/img/picture-generator/52e4d1424f5aa914f1dc8460962e33791c3ad6e04e5074417d2e72d2954ac5_640.jpg"
+                                            image="https://picsum.photos/id/1/900/1100"
                                             title="Titulo da imagem"
                                         />
                                         
@@ -58,9 +58,9 @@ const Product = () => {
                                         }}
                                     >
                                         <CardMedia 
-                                            image="https://mashedradish.com/wp-content/uploads/2017/03/random.jpg"
-                                            sx={{paddingTop: '56%'}}
                                             
+                                            sx={{paddingTop: '56%'}}
+                                            image="https://picsum.photos/id/2/900/1100"
                                             
                                             title="Titulo da imagem"
                                         />

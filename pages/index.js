@@ -62,7 +62,7 @@ const Index = () => {
                     <Grid container spacing={4}>
                         <Grid item xs={12} sm={6} md={4} >
                             <Card 
-                                image={'https://img.freepik.com/free-photo/colorful-design-with-spiral-design_188544-9588.jpg'}
+                                image={'https://picsum.photos/id/2/900/1100'}
                                 title='Produto X'
                                 subtitle='R$60'
                             />
@@ -71,7 +71,7 @@ const Index = () => {
                         </Grid>
                         <Grid item xs={12} sm={6} md={4}>
                             <Card 
-                                image={'https://img.freepik.com/free-photo/colorful-design-with-spiral-design_188544-9588.jpg'}
+                                image={"https://picsum.photos/id/3/900/1100"}
                                 title='Produto X'
                                 subtitle='R$60'
                             />
@@ -81,7 +81,7 @@ const Index = () => {
                         </Grid>
                         <Grid item xs={12} sm={6} md={4}>
                             <Card 
-                                image={'https://img.freepik.com/free-photo/colorful-design-with-spiral-design_188544-9588.jpg'}
+                                image={"https://picsum.photos/id/10/900/1100"}
                                 title='Produto X'
                                 subtitle='R$60'
                             />
