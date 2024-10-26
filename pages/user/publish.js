@@ -12,7 +12,8 @@ import {
     InputAdornment, 
     MenuItem,
     FormControl,
-    FormHelperText
+    FormHelperText,
+    Input
 } from '@mui/material'
 
 import TemplateDefault from '../../src/templates/Default'
@@ -82,7 +83,10 @@ const validationSchema = yup.object().shape({
         .required('Campo obrigatório'),
     
     category: yup.string()
-        .required('Campo obrigatório')
+        .required('Campo obrigatório'),
+    description: yup.string()
+        .min(30, 'Escreva uma descrição com pelo menos 30 caracteres')
+        .required('Campo obrigatório'),
 })
 
 const Publish = () => {
@@ -116,7 +120,8 @@ const Publish = () => {
                 <Formik
                     initialValues={{
                         title: '',
-                        category: ''
+                        category: '',
+                        description: '',
                     }}
                     validationSchema={validationSchema}
                     onSubmit={(values) => {
@@ -154,36 +159,43 @@ const Publish = () => {
                                             
                                             sx={{backgroundColor: theme.palette.background.white, padding: 3, boxShadow: '2px 2px 10px black', borderRadius: 2}}
                                         >
-                                            <Typography color="textPrimary" component="hh6" variant="h6" align="start">
-                                                Título do Anúncio
-                                            </Typography>
-                                            <TextField
-                                                name='title'
-                                                onChange={handleChange}
-                                                value={values.title}
-                                                variant='standard' 
-                                                label="ex.: Bicicleta Aro 18 com garantia"
-                                                size="small"
-                                                fullWidth
-                                                error={errors.title}
-                                                helperText={errors.title}
-                                            />
+
+                                            <FormControl fullWidth error={errors.title}>
+                                                <InputLabel sx={{
+                                                    fontWeight: 500
+                                                }}>
+                                                    Título do Anuncio
+                                                </InputLabel>
+
+                                                <Input
+                                                    name='title'
+                                                    onChange={handleChange}
+                                                    value={values.title}
+                                                    variant='standard' 
+                                                    
+                                                    
+
+                                                />
+                                                <FormHelperText>    
+                                                    {errors.title}
+                                                </FormHelperText>
+                                            </FormControl>
+
                                             <br/><br/>
-                                            <Typography
-                                                component="h6"
-                                                variant="h6"
-                                                color="textPrimary"
-                                            >
-                                                Categoria
-                                            </Typography>
+
 
                                             <FormControl fullWidth error={errors.category}>
-
+                                                <InputLabel sx={{
+                                                    fontWeight: 500
+                                                }}>
+                                                    Categoria
+                                                </InputLabel>
                                                 <Select
                                                     name='category'
                                                     value={values.category}
                                                     fullWidth
                                                     onChange={handleChange}
+                                                    variant='standard'
                                                 >
 
                                                     <MenuItem value="Bebê e Crianças">Bebê e Crianças</MenuItem>
@@ -270,21 +282,30 @@ const Publish = () => {
                                         <Box
                                             sx={{backgroundColor: theme.palette.background.white, padding: 3, boxShadow: '2px 2px 10px black', borderRadius: 2}}
                                         >
-                                            <Typography variant="h6" component="h6" color="textPrimary">
-                                                Descrição
-                                            </Typography>
-                                            <Typography variant="body2" component="div" color='textPrimary'>
-                                                Escreva os detalhes do que está vendendo
-                                            </Typography>
-                                            <TextField
-                                                multiline
-                                                rows={6}
-                                                variant="outlined"
-                                                fullWidth
-                                                sx={{mt:2}}
-                                            >
+
+
+
+
+                                            <FormControl fullWidth error={errors.description}>
                                                 
-                                            </TextField>
+                                                <InputLabel sx={{
+                                                    fontWeight: 500
+                                                }}>
+                                                    Escreva os detalhes do que está vendendo
+                                                </InputLabel>
+                                                <Input
+                                                    name='description'                                                   
+                                                    multiline
+                                                    rows={6}
+                                                    variant="standart"
+                                                    fullWidth
+                                                    
+                                                />
+                                                    
+                                                <FormHelperText>
+                                                    {errors.description}
+                                                </FormHelperText>
+                                            </FormControl>
                                         </Box>
                                     </Container>
                                     <Container
