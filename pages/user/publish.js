@@ -21,7 +21,7 @@ import styled from 'styled-components'
 import { DeleteForever } from '@mui/icons-material'
 import { useDropzone } from 'react-dropzone'
 
-import { useState } from 'react'
+// import { useState } from 'react'
 
 import { Formik } from 'formik'
 import * as yup from 'yup'
@@ -36,7 +36,9 @@ const Dropzone = styled.div`
     border: 2px dashed black;
     padding: 10px;
     margin: 15px 15px 15px 0;
-    cursor: pointer;
+    cursor: pointer;  
+    
+
 `
 
 const Thumb = styled.div`
@@ -91,33 +93,15 @@ const validationSchema = yup.object().shape({
         .required('Campo obrigatório'),
     name: yup.string()
         .required('Campo obrigatório'),
-    phone: yup.number('Digite um telefone válido').required('Campo obrigatório')
+    phone: yup.number('Digite um telefone válido')
+        .required('Campo obrigatório'),
+    files: yup.array()
+        .min(1, 'Envie pelo menos uma foto')
+        .required('Campo obrigatório')
 })
 
 const Publish = () => {
     const theme = useTheme()
-
-    const [files, setFiles] = useState([])
-
-    const {getRootProps, getInputProps} = useDropzone({
-        accept: 'image/*',
-        onDrop: (acceptedFile) => {
-            const newFiles = acceptedFile.map(file => {
-                return Object.assign(file, {
-                    preview: URL.createObjectURL(file)
-                })
-            })
-            setFiles([
-                ...files,
-                ...newFiles,
-            ])
-        }   
-    })
-
-    const handleRemoveFile = (fileName) => {
-        const newFilesState = files.filter(file => file.name !== fileName)
-        setFiles(newFilesState)
-    }
 
     return(
         <>
@@ -130,7 +114,8 @@ const Publish = () => {
                         price: '',
                         name: '',
                         phone: '',
-                        email: ''
+                        email: '',
+                        files: []
                     }}
                     validationSchema={validationSchema}
                     onSubmit={(values) => {
@@ -138,13 +123,38 @@ const Publish = () => {
                     }}
                 >
                     {
-                        ({
+                        ({  
+                            touched,
                             values,
                             errors,
                             handleChange,
-                            handleSubmit
+                            handleSubmit,
+                            setFieldValue
                         }) => {
-                            console.log(errors)
+                            // console.log(errors)
+
+                            const {getRootProps, getInputProps} = useDropzone({
+                                accept: 'image/*',
+                                onDrop: (acceptedFile) => {
+                                    const newFiles = acceptedFile.map(file => {
+                                        return Object.assign(file, {
+                                            preview: URL.createObjectURL(file)
+                                        })
+                                    })
+
+                                    // setFieldValue('nome', 'valor')
+
+                                    setFieldValue('files', [
+                                        ...values.files,
+                                        ...newFiles,
+                                    ])
+                                }   
+                            })
+                        
+                            const handleRemoveFile = (fileName) => {
+                                const newFilesState = values.files.filter(file => file.name !== fileName)
+                                setFieldValue('files', newFilesState)
+                            }
 
                             return (
                                 <form onSubmit={handleSubmit}>
@@ -169,7 +179,7 @@ const Publish = () => {
                                             sx={{backgroundColor: theme.palette.background.white, padding: 3, boxShadow: '2px 2px 10px black', borderRadius: 2}}
                                         >
 
-                                            <FormControl fullWidth error={errors.title}>
+                                            <FormControl fullWidth error={errors.title && touched.title}>
                                                 <InputLabel sx={{
                                                     fontWeight: 500
                                                 }}>
@@ -186,14 +196,14 @@ const Publish = () => {
 
                                                 />
                                                 <FormHelperText>    
-                                                    {errors.title}
+                                                    {errors.title && touched.title ? errors.title : null}
                                                 </FormHelperText>
                                             </FormControl>
 
                                             <br/><br/>
 
 
-                                            <FormControl fullWidth error={errors.category}>
+                                            <FormControl fullWidth error={errors.category && touched.category}>
                                                 <InputLabel sx={{
                                                     fontWeight: 500
                                                 }}>
@@ -224,7 +234,7 @@ const Publish = () => {
                                                     <MenuItem value="Outros">Outros</MenuItem>
                                                 </Select>
                                                 <FormHelperText>
-                                                    {errors.category}
+                                                    {errors.category && touched.category ? errors.category : null}
                                                 </FormHelperText>
                                             </FormControl>
                                         </Box>
@@ -236,25 +246,32 @@ const Publish = () => {
                                         <Box
                                             sx={{backgroundColor: theme.palette.background.white, padding: 3, boxShadow: '2px 2px 10px black', borderRadius: 2}}
                                         >
-                                            <Typography variant="h6" component="h6" color="textPrimary">
+                                            <Typography variant="h6" component="h6" color={errors.files && touched.files ? 'error' : 'textPrimary'}>
                                                 Imagens
                                             </Typography>
-                                            <Typography variant="body2" component="div" color='textPrimary'>
+                                            <Typography variant="body2" component="div" color={errors.files && touched.files ? 'error' : 'textPrimary'}>
                                                 A primeira imagem é a foto principal do seu anúncio.
                                             </Typography>
 
+                                            {
+                                                errors.files && touched.files
+                                                
+                                                ? <Typography color='error' variant='body2'>{errors.files }</Typography>
+                                                : null
+                                            }
+                                            
                                             <Box sx={{
                                                 display: 'flex',
                                                 flexWrap: 'wrap',
                                             }}>
-                                                <Dropzone sx={{backgroundColor: theme.palette.background.default}} {...getRootProps()}>
-                                                    <input {...getInputProps()}/>
-                                                    <Typography color="textPrimary" variant="body2">
+                                                <Dropzone style={errors.files && touched.files ? {border: '2px dashed red'} : {border: '2px dashed black'}} error={errors.files && touched.files}  {...getRootProps()}>
+                                                    <input name='files' {...getInputProps()}/>
+                                                    <Typography color={errors.files && touched.files ? 'error' : 'textPrimary'} variant="body2">
                                                         Clique para adicionar ou arraste a imagem para aqui!
                                                     </Typography>
                                                 </Dropzone>
                                                 {
-                                                    files.map((file, index) => (
+                                                    values.files.map((file, index) => (
                                                         
                                                         <Thumb // dinâmico
                                                             key={file.name}
@@ -292,7 +309,7 @@ const Publish = () => {
                                             sx={{backgroundColor: theme.palette.background.white, padding: 3, boxShadow: '2px 2px 10px black', borderRadius: 2}}
                                         >
 
-                                            <FormControl fullWidth error={errors.description}>
+                                            <FormControl fullWidth error={errors.description && touched.description}>
                                                 
                                                 <InputLabel sx={{
                                                     fontWeight: 500
@@ -309,7 +326,7 @@ const Publish = () => {
                                                 />
                                                     
                                                 <FormHelperText>
-                                                    {errors.description}
+                                                    {errors.description && touched.description ? errors.description : null}
                                                 </FormHelperText>
                                             </FormControl>
                                         </Box>
@@ -321,7 +338,7 @@ const Publish = () => {
                                         <Box
                                             sx={{backgroundColor: theme.palette.background.white, padding: 3, boxShadow: '2px 2px 10px black', borderRadius: 2}}
                                         >
-                                            <FormControl fullWidth error={errors.price}>
+                                            <FormControl fullWidth error={errors.price && touched.price}>
                                                 <InputLabel sx={{
                                                     fontWeight: 500
                                                 }}>
@@ -338,7 +355,7 @@ const Publish = () => {
 
                                                 />
                                                 <FormHelperText>    
-                                                    {errors.price}
+                                                    {errors.price && touched.price ? errors.price : null}
                                                 </FormHelperText>
                                             </FormControl>
                                             
@@ -358,7 +375,7 @@ const Publish = () => {
                                             
                                             <FormControl sx={{
                                                 marginTop: 3
-                                            }} fullWidth error={errors.name}>
+                                            }} fullWidth error={errors.name && touched.name}>
                                                 <InputLabel sx={{
                                                     fontWeight: 500
                                                 }}>
@@ -375,13 +392,13 @@ const Publish = () => {
 
                                                 />
                                                 <FormHelperText>    
-                                                    {errors.name}
+                                                    {errors.name && touched.name ? errors.name : null}
                                                 </FormHelperText>
                                             </FormControl>
 
                                             <FormControl sx={{
                                                 marginTop: 3
-                                            }}  fullWidth error={errors.email}>
+                                            }}  fullWidth error={errors.email && touched.email}>
                                                 <InputLabel sx={{
                                                     fontWeight: 500
                                                 }}>
@@ -396,13 +413,13 @@ const Publish = () => {
                                                     
                                                 />
                                                 <FormHelperText>    
-                                                    {errors.email}
+                                                    {errors.email && touched.email ? errors.email : null}
                                                 </FormHelperText>
                                             </FormControl>
 
                                             <FormControl sx={{
                                                 marginTop: 3
-                                            }}  fullWidth error={errors.phone}>
+                                            }}  fullWidth error={errors.phone && touched.phone}>
                                                 <InputLabel sx={{
                                                     fontWeight: 500
                                                 }}>
@@ -419,7 +436,7 @@ const Publish = () => {
 
                                                 />
                                                 <FormHelperText>    
-                                                    {errors.phone}
+                                                    {errors.phone && touched.phone ? errors.phone : null}
                                                 </FormHelperText>
                                             </FormControl>
                                                 
