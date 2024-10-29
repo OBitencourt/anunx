@@ -1,98 +1,132 @@
+import axios from "axios";
 
+import TemplateDefault from "../../../src/templates/Default";
 
-import React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { styled } from '@mui/material/styles'; // Importando o sistema de estilização
+import {
+  Box,
+  Container,
+  FormControl,
+  InputLabel,
+  Typography,
+  Input,
+  FormHelperText,
+  Button,
+  CircularProgress,
+} from "@mui/material";
 
-const StyledAvatar = styled(Avatar)(({ theme }) => ({
-  margin: theme.spacing(1),
-  backgroundColor: theme.palette.primary.main,
-}));
+import theme from "../../../src/theme";
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center">
-      {'Copyright © '}
-      Your Website {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+import { Formik } from "formik";
 
-export default function SignIn() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
+import { validationSchema, initialValues } from "./formValues";
+
+import useToasty from "../../../src/contexts/Toasty";
+
+import { useRouter } from "next/router";
+
+const SignIn = () => {
+  const router = useRouter();
+
+  const { setToasty } = useToasty();
+
+  //const handleFormSubmit = async (values) => {
+
+  //};
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <Box
-        sx={{
-          marginTop: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
-        <StyledAvatar>
-          <LockOutlinedIcon />
-        </StyledAvatar>
-        <Typography component="h1" variant="h5">
-          Sign in
-        </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-          >
-            Sign In
-          </Button>
-          <Grid container>
-            <Grid item>
-              <Typography variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Typography>
-            </Grid>
-          </Grid>
-        </Box>
-      </Box>
-      <Copyright />
-    </Container>
+    <>
+      <TemplateDefault>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          // onSubmit={handleFormSubmit}
+        >
+          {({
+            values,
+            touched,
+            errors,
+            handleChange,
+            handleSubmit,
+            isSubmitting,
+          }) => {
+            return (
+              <form onSubmit={handleSubmit}>
+                <Container maxWidth="md">
+                  <Typography variant="h2" align="center">
+                    Entre na sua conta
+                  </Typography>
+
+
+                  <Box
+                    sx={{
+                      backgroundColor: theme.palette.background.white,
+                      marginTop: 3,
+                      padding: 3,
+                      boxShadow: "0 0 7px gray",
+                      borderRadius: 2,
+                    }}
+                  >
+                    <FormControl
+                      error={errors.email && touched.email}
+                      sx={{ mt: 2 }}
+                      fullWidth
+                    >
+                      <InputLabel>E-mail</InputLabel>
+                      <Input
+                        name="email"
+                        value={values.email}
+                        onChange={handleChange}
+                        fullWidth
+                      />
+                      <FormHelperText>
+                        {errors.email && touched.email ? errors.email : null}
+                      </FormHelperText>
+                    </FormControl>
+
+                    <FormControl
+                      error={errors.password && touched.password}
+                      sx={{ mt: 2 }}
+                      fullWidth
+                    >
+                      <InputLabel>Senha</InputLabel>
+                      <Input
+                        type="password"
+                        name="password"
+                        value={values.password}
+                        onChange={handleChange}
+                        fullWidth
+                      />
+                      <FormHelperText>
+                        {errors.password && touched.password
+                          ? errors.password
+                          : null}
+                      </FormHelperText>
+                    </FormControl>
+
+                    {isSubmitting ? (
+                      <CircularProgress
+                        sx={{ display: "block", margin: "15px auto" }}
+                      />
+                    ) : (
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        fullWidth
+                        sx={{ mt: 3, mb: 2 }}
+                      >
+                        Entrar
+                      </Button>
+                    )}
+
+                  </Box>
+                </Container>
+              </form>
+            );
+          }}
+        </Formik>
+      </TemplateDefault>
+    </>
   );
-}
+};
+
+export default SignIn;
