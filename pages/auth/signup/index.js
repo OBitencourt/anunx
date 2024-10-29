@@ -2,7 +2,6 @@ import axios from 'axios'
 
 import TemplateDefault from '../../../src/templates/Default'
 
-import { useRouter } from 'next/router'
 
 import {
     Box,
@@ -24,6 +23,7 @@ import { validationSchema, initialValues } from './formValues'
 
 import useToasty from '../../../src/contexts/Toasty'
 
+import { useRouter } from 'next/router'
 
 const SignUp = () => {
 
@@ -45,7 +45,6 @@ const SignUp = () => {
 
         }
 
-        // redirect
     }
 
 
