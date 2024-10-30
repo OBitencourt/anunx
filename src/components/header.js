@@ -8,6 +8,7 @@ import { Avatar, Container, IconButton, MenuItem, Menu, Divider } from '@mui/mat
 import Link from 'next/link';
 import { AccountCircle } from '@mui/icons-material';
 
+import { useSession, signOut } from 'next-auth/react';
 
 export default function ButtonAppBar() {
 
@@ -15,7 +16,7 @@ export default function ButtonAppBar() {
 
   const openUserMenu = Boolean(anchorUserMenu)
 
-
+  const { data: session} = useSession()
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -27,7 +28,7 @@ export default function ButtonAppBar() {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               Anunx
             </Typography>
-            <Link href="/user/publish" passHref legacyBehavior>
+            <Link href={ session ? '/user/publish' : '/auth/signin'} passHref legacyBehavior>
               <Button 
                 color="inherit" 
                 variant='outlined'
@@ -38,36 +39,49 @@ export default function ButtonAppBar() {
                   '&:hover': {
                     borderColor: 'white',
                     backgroundColor: 'rgba(255, 255, 255, 0.1)' // Adiciona um efeito hover leve
-                  }
+                  },
+
+                  marginRight: 2
                 }}
                 
               >
                 Anunciar e Vender
               </Button>
             </Link>
+            
+            {
 
-            <IconButton color='secondary'
-              onClick={(e) => {
-                setAnchorUserMenu(e.currentTarget)
-              }}
-            >
-              {
-                true === false
-                ? 
-                
-                <Avatar 
-                  src=""
-                />
+              session 
 
-                :
+              ? (
 
-                <AccountCircle />
-              }
+                <IconButton color='secondary'
+                  onClick={(e) => {
+                    setAnchorUserMenu(e.currentTarget)
+                  }}
+                >
+                  {
+                    session.user.image
+                    ? 
+                    
+                    <Avatar 
+                      src={session.user.image}
+                    />
 
-              <Typography variant='subtitle2' color='secondary' sx={{ml:1}}> 
-                Arthur Bitencourt
-              </Typography>
-            </IconButton>
+                    :
+
+                    <AccountCircle />
+                  }
+
+                  <Typography variant='subtitle2' color='secondary' sx={{ml:2}}> 
+                    {session.user.name}
+                  </Typography>
+                </IconButton>
+
+              )
+
+              : null
+            }
           </Toolbar>
 
           <Menu
@@ -90,7 +104,13 @@ export default function ButtonAppBar() {
               >Publicar novo anúncio</MenuItem>
             </Link>
             <Divider />
-            <MenuItem>Sair</MenuItem>
+            <MenuItem
+              onClick={() => {
+                signOut({callbackUrl: '/'})
+              }}
+            >
+              Sair
+            </MenuItem>
           </Menu>
         </Container>
       </AppBar>
