@@ -1,4 +1,3 @@
-import axios from "axios";
 
 import TemplateDefault from "../../../src/templates/Default";
 
@@ -14,24 +13,42 @@ import {
   CircularProgress,
 } from "@mui/material";
 
+import Alert from "@mui/material";
+
 import theme from "../../../src/theme";
 
 import { Formik } from "formik";
 
 import { validationSchema, initialValues } from "./formValues";
 
-import useToasty from "../../../src/contexts/Toasty";
+import { signIn, useSession } from "next-auth/react";
 
 import { useRouter } from "next/router";
 
+// import useToasty from "../../../src/contexts/Toasty";
+
+// import { useRouter } from "next/router";
+
 const SignIn = () => {
-  const router = useRouter();
+  // const router = useRouter();
 
-  const { setToasty } = useToasty();
+  // const { setToasty } = useToasty();
 
-  //const handleFormSubmit = async (values) => {
+  
+  const { data: session } = useSession()
 
-  //};
+  console.log(session)
+  const router = useRouter()
+
+  const handleFormSubmit = async (values) => {
+    
+    signIn('credentials', {
+      email: values.email,
+      password: values.password,
+      callbackUrl: 'http://localhost:3000/user/dashboard'
+    })
+  
+  };
 
   return (
     <>
@@ -39,7 +56,7 @@ const SignIn = () => {
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
-          // onSubmit={handleFormSubmit}
+          onSubmit={handleFormSubmit}
         >
           {({
             values,
@@ -66,6 +83,15 @@ const SignIn = () => {
                       borderRadius: 2,
                     }}
                   >
+
+                    {
+                      router.query.i === '1' 
+                      ? (
+                        <Alert severity='error' sx={{margin: 5}}>Usuário ou senha inválidos</Alert>
+                      )
+                      : null
+                    }
+
                     <FormControl
                       error={errors.email && touched.email}
                       sx={{ mt: 2 }}

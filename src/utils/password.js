@@ -10,7 +10,15 @@ const crypto = async pwd => {
     return password
 }
 
+const compare = async (pwd, hash) => {
+
+    const result = await bcrypt.compare(pwd, hash)
+
+    return result
+}
+
 export {
-    crypto
+    crypto,
+    compare
 } 
     
