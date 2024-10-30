@@ -24,13 +24,9 @@ import { validationSchema, initialValues } from "./formValues";
 import { signIn, useSession } from "next-auth/react";
 
 import { useRouter } from "next/router";
-
-// import useToasty from "../../../src/contexts/Toasty";
-
-// import { useRouter } from "next/router";
+import Image from "next/image";
 
 const SignIn = () => {
-  // const router = useRouter();
 
   // const { setToasty } = useToasty();
 
@@ -49,6 +45,13 @@ const SignIn = () => {
     })
   
   };
+
+  const handleGoogleLogin = () => {
+
+    signIn('google', {
+      callbackUrl: 'http://localhost:3000/user/dashboard'
+    })
+  }
 
   return (
     <>
@@ -73,7 +76,46 @@ const SignIn = () => {
                     Entre na sua conta
                   </Typography>
 
+                  <Box sx={{padding: 3}} align='center'>
+                    <Button
+                      sx={{
+                        padding: 2
+                      }}
+                      onClick={handleGoogleLogin}
+                      variant='contained'
+                      color="primary"
+                      startIcon={
+                        <Image 
+                          width={20}
+                          height={20}
+                          alt="google logo"
+                          src="/images/google.svg"
+                        />
+                      }
+                    >
+                      Entre com Google
+                    </Button>
+                  </Box>
 
+                  <Box sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backgroundColor: 'black',
+                    width: '100%',
+                    height: '1px',
+                    margin: '10px'
+                  }} align='center'>
+                    <span
+                      style={{
+                        backgroundColor: 'rgb(242,244,245)',
+                        padding: '0 30px'
+                      }}
+                    >
+                      Ou
+                    </span>
+                  </Box>
+                      
                   <Box
                     sx={{
                       backgroundColor: theme.palette.background.white,
