@@ -7,19 +7,18 @@ const Auth = ({ children }) => {
     const router = useRouter();
 
     useEffect(() => {
+        if (status === 'authenticated') return; // Se autenticado, não faz nada
 
-        if (status === 'loading') {
-            return <p>Loading...</p>; // ou um componente de loading
-        }
-    
         if (!session) {
-            router.push('/auth/signin'); // redireciona para a página de login se não estiver autenticado
-            return null;
+            router.push('/auth/signin'); // Redireciona se não estiver autenticado
         }
-    }, [session])
+    }, [session, status, router]);
 
+    if (status === 'loading') {
+        return <p>Loading...</p>; // Mensagem de carregamento enquanto o status é 'loading'
+    }
 
     return children;
-}
+};
 
-export default Auth
+export default Auth;
