@@ -21,12 +21,57 @@ import { useTheme } from '@emotion/react'
 import { Formik } from 'formik'
 
 
-
 import { initialValues, validationSchema } from './formValues'
 import FileUpload from '../../../src/components/FileUpload'
 
+import useToasty from '../../../src/contexts/Toasty'
+
+import { useRouter } from 'next/router'
+
+import axios from 'axios'
+
 const Publish = () => {
     const theme = useTheme()
+    const { setToasty } = useToasty()
+    const router = useRouter()
+
+    const handleFormSubmit = values => {
+        
+        const handleSuccess = () => {
+            setToasty({
+                open: true,
+                title: 'Anúncio cadastrado com sucesso',
+                severity: 'success'
+            })
+
+            // router.push('/user/dashboard')
+        }
+
+        const handleError = () => {
+            setToasty({
+                open: true,
+                title: 'Ops, ocorreu um erro no cadastro do anúncio',
+                severity: 'error'
+            })
+
+        }
+
+        const formData = new FormData()
+
+        for( let field in values) {
+            if (field === 'files') {
+                values.files.forEach(file => {
+                    formData.append('files', file)
+                })
+            } else {
+                formData.append(field, values[field])
+            }
+        }
+
+        axios.post('/api/products', formData)
+            .then(handleSuccess)
+            .catch(handleError)
+    }
 
     return(
         <>
@@ -34,9 +79,7 @@ const Publish = () => {
                 <Formik
                     initialValues={initialValues}
                     validationSchema={validationSchema}
-                    onSubmit={(values) => {
-                        console.log('boa enviou o form', values)
-                    }}
+                    onSubmit={handleFormSubmit}
                 >
                     {
                         ({  
@@ -71,7 +114,7 @@ const Publish = () => {
                                     >
                                         <Box
                                             
-                                            sx={{backgroundColor: theme.palette.background.white, padding: 3, boxShadow: '2px 2px 10px black', borderRadius: 2}}
+                                            sx={{backgroundColor: theme.palette.background.white, padding: 3, boxShadow: '0 0 7px gray', borderRadius: 2}}
                                         >
 
                                             <FormControl fullWidth error={errors.title && touched.title}>
@@ -139,7 +182,7 @@ const Publish = () => {
                                         sx={{mt:6, mb: 3}}
                                     >
                                         <Box
-                                            sx={{backgroundColor: theme.palette.background.white, padding: 3, boxShadow: '2px 2px 10px black', borderRadius: 2}}
+                                            sx={{backgroundColor: theme.palette.background.white, padding: 3, boxShadow: '0 0 7px gray', borderRadius: 2}}
                                         >
                                             <FileUpload 
                                             
@@ -155,7 +198,7 @@ const Publish = () => {
                                         sx={{mt:6, mb: 3}}
                                     >
                                         <Box
-                                            sx={{backgroundColor: theme.palette.background.white, padding: 3, boxShadow: '2px 2px 10px black', borderRadius: 2}}
+                                            sx={{backgroundColor: theme.palette.background.white, padding: 3, boxShadow: '0 0 7px gray', borderRadius: 2}}
                                         >
 
                                             <FormControl fullWidth error={errors.description && touched.description}>
@@ -185,7 +228,7 @@ const Publish = () => {
                                         sx={{mt:6, mb: 3}}
                                     >
                                         <Box
-                                            sx={{backgroundColor: theme.palette.background.white, padding: 3, boxShadow: '2px 2px 10px black', borderRadius: 2}}
+                                            sx={{backgroundColor: theme.palette.background.white, padding: 3, boxShadow: '0 0 7px gray', borderRadius: 2}}
                                         >
                                             <FormControl fullWidth error={errors.price && touched.price}>
                                                 <InputLabel sx={{
@@ -216,7 +259,7 @@ const Publish = () => {
                                         sx={{mt:6, mb: 3}}
                                     >
                                         <Box
-                                            sx={{backgroundColor: theme.palette.background.white, padding: 3, boxShadow: '2px 2px 10px black', borderRadius: 2}}
+                                            sx={{backgroundColor: theme.palette.background.white, padding: 3, boxShadow: '0 0 7px gray', borderRadius: 2}}
                                         >
                                             <Typography variant="h6" component="h6" color="textPrimary">
                                                 Dados de Contato
