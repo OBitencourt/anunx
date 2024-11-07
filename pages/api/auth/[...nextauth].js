@@ -41,6 +41,22 @@ export const authOptions = {
   jwt: {
     secret: process.env.JWT_TOKEN,
   },
+  
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.uid = user.id;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (token?.uid) {
+        session.userId = token.uid;
+      }
+      return session;
+    }
+  },
+  
 
   database: process.env.MONGODB_URI,
 }
