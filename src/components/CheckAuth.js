@@ -7,12 +7,10 @@ const Auth = ({ children }) => {
     const router = useRouter();
 
     useEffect(() => {
-        if (status === 'authenticated') return; // Se autenticado, não faz nada
-
-        if (!session) {
-            router.push('/auth/signin'); // Redireciona se não estiver autenticado
+        if (status === 'unauthenticated') {
+            router.push('/auth/signin'); // Redireciona se o status for 'unauthenticated'
         }
-    }, [session, status, router]);
+    }, [status, router]);
 
     if (status === 'loading') {
         return <p>Loading...</p>; // Mensagem de carregamento enquanto o status é 'loading'
