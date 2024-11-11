@@ -1,8 +1,11 @@
 
 import { Box, Container, Grid, Typography, Chip, Card, CardHeader, Avatar, CardMedia } from '@mui/material'
-import TemplateDefault from '../../src/templates/Default'
+import TemplateDefault from '../../../src/templates/Default'
 import styled from 'styled-components'
 import Carousel from 'react-material-ui-carousel'
+import dbConnect from '../../../src/utils/dbConnect'
+import ProductsModel from '../../../src/models/products'
+import formatCurrency from '../../../src/utils/currency'
 
 
 const StyledBox = styled(Box)`
@@ -11,7 +14,9 @@ const StyledBox = styled(Box)`
     background-color: white;
 `
 
-const Product = () => {
+const Product = ({
+    product
+}) => {
     return (
         <>
             <TemplateDefault>
@@ -21,14 +26,14 @@ const Product = () => {
                     <Grid container spacing={3}>
                         <Grid item
                             xs={8}
-                        >
+                            >
                             <StyledBox
                                 sx={{
                                     backgroundColor: 'white',
                                     padding: 3,
                                     marginBottom: 3,
                                 }}
-                            >
+                                >
                                 <Carousel
                                     autoPlay={false}
                                     navButtonsProps={{
@@ -38,34 +43,27 @@ const Product = () => {
                                         }
                                     }}
                                     animation='slide'
-                                >
-
-                                    <Card
-                                        sx={{
-                                            height: '100%',
-                                        }}
                                     >
-                                        <CardMedia 
-                                            sx={{paddingTop: '56%'}}
-                                            image="https://picsum.photos/id/1/900/1100"
-                                            title="Titulo da imagem"
-                                        />
-                                        
-                                    </Card>
-                                    <Card
-                                        sx={{
-                                            height: '100%',
-                                        }}
-                                    >
-                                        <CardMedia 
+                                        {
                                             
-                                            sx={{paddingTop: '56%'}}
-                                            image="https://picsum.photos/id/2/900/1100"
+                                            product.files.map(file => {
+                                                return (  // Adicione o 'return' aqui
+                                                    <Card
+                                                        key={file.name}
+                                                        sx={{
+                                                            height: '100%',
+                                                        }}
+                                                    >
+                                                        <CardMedia 
+                                                            sx={{paddingTop: '56%'}}
+                                                            image={`/uploads/${file.name}`}
+                                                            title={product.title}
+                                                        />
+                                                    </Card>
+                                                )
+                                            })
                                             
-                                            title="Titulo da imagem"
-                                        />
-                                        
-                                    </Card>
+                                        }                   
                                 </Carousel>
                             </StyledBox>
                             <StyledBox
@@ -80,7 +78,7 @@ const Product = () => {
                                     variant='caption'
                                     
                                 >
-                                    Publicado 3 dias atrás
+                                    Publicado 3 dias atrás -- TO DO
                                 </Typography>
                                 <Typography
                                     component='h4'
@@ -89,7 +87,7 @@ const Product = () => {
                                         margin: '15px 0px',
                                     }}
                                 >
-                                    Jaguar
+                                    {product.title}
                                 </Typography>
                                 <Typography
                                     component='h4'
@@ -97,9 +95,9 @@ const Product = () => {
                                     fontWeight='bold'
                                     sx={{marginBottom: 1,}}
                                 >
-                                    R$ 50.000,00
+                                    {formatCurrency(product.price)}
                                 </Typography>
-                                <Chip label='Categoria' />
+                                <Chip label={product.category} />
                             </StyledBox>
                             <StyledBox
                                 sx={{
@@ -121,7 +119,7 @@ const Product = () => {
                                     variant='body2'                                    
                                     
                                 >
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                                    {product.description}
                                 </Typography>
                                 
                             </StyledBox>
@@ -138,13 +136,18 @@ const Product = () => {
                             >
                                 <CardHeader 
                                     avatar={
-                                        <Avatar>A</Avatar>
+                                        <Avatar
+                                            src={product.user.image}
+                                        >
+                                            { product.user.image || product.user.name[0]}
+                                        </Avatar>
                                     }
-                                    title='Arthur Bitencourt'
-                                    subheader='arthursilvadevelop@gmail.com'
+                                    title={product.user.name}
+                                    subheader={product.user.email}
                                 />
                                 <CardMedia
-                                    image='https://cdn.pixabay.com/photo/2016/07/07/16/46/dice-1502706_640.jpg'
+                                    image={product.user.image}
+                                    title={product.user.name}
                                 />
 
                             </Card>
@@ -163,6 +166,20 @@ const Product = () => {
             </TemplateDefault>
         </>
     )
+}
+
+export async function getServerSideProps({ query }) {
+    const { id } = query
+
+    await dbConnect()
+
+    const product = await ProductsModel.findOne({ _id: id})
+
+    return {
+        props: {
+            product: JSON.parse(JSON.stringify(product))
+        }
+    }
 }
 
 export default Product
