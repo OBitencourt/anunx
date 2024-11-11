@@ -1,12 +1,12 @@
 
 
-import { post } from '../../src/controllers/products'
+import { remove } from '../../../src/controllers/products'
 import { createRouter } from 'next-connect'
 
 const route = createRouter()
 
 
-route.post(post)
+route.delete(remove)
 
 export default route.handler({
     onError: (err, req, res) => {
@@ -15,8 +15,3 @@ export default route.handler({
     },
 });
 
-export const config = {
-  api: {
-    bodyParser: false
-  }
-}

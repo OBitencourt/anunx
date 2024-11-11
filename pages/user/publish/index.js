@@ -78,7 +78,7 @@ const Publish = ({ userId, image}) => {
             }
         }
 
-        axios.post('http://localhost:3000/api/products', formData, {
+        axios.post('http://localhost:3000/api/products/post', formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
           })
             .then(handleSuccess)
