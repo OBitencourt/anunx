@@ -15,10 +15,22 @@ import Card from '../src/components/Card'
 import dbConnect from '../src/utils/dbConnect'
 import ProductsModel from '../src/models/products'
 import formatCurrency from '../src/utils/currency'
+import { useState } from 'react'
+import { useRouter } from 'next/router'
 
 const Index = ({
     products
 }) => {
+    const router = useRouter()
+
+    const [search, setSearch] = useState('')
+
+    const handleSubmitSearch = () => {
+        router.push({
+            pathname: `/search/${search}`
+        })
+    }
+
     return (
         <>
             <TemplateDefault>
@@ -44,11 +56,14 @@ const Index = ({
                         }}
                     >
                         <InputBase 
+                            onChange={(e) => {
+                                setSearch(e.target.value)
+                            }}
                             placeholder='Ex.: iPhone 12 com garantia'
                             fullWidth
                             variant='outlined'
                         />
-                        <IconButton>
+                        <IconButton onClick={handleSubmitSearch}>
                             <Search />
                         </IconButton>
                     </Paper>
